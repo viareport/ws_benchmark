@@ -3,66 +3,16 @@
 const Client = require( "./Client" );
 const statsMetter = require( "./statsMetter" );
 
-const SCENARIOS = [
-  {
-    "action": "send",
-    "data": "ping"
-  },
-  {
-    "action": "waitingFor",
-    "message": "get-contract-modification"
-  },
-  {
-    "target": "uid-0",
-    "action": "send",
-    "data": "post-contract-modification",
-    "returnPacket": "get-contract-modification",
-    "IOBlocking": true // will wait until all clients received the edit packet, before continuing the scenario
-  }/*,
-  {
-    "action": "send",
-    "data": "ping",
-    "expect": "pong"
-  },
-  {
-    "action": "send",
-    "data": "changeProfile",
-    "expect": "changeProfileSuccess",
-    "IOBlocking": false
-  }*/
-];
+const jsonConfig = require( "./config" );
 
-// TODO gérer le timeout client dans le statmetter ?
+const SCENARIOS = jsonConfig.scenarios;
+const CONFIG = jsonConfig.connectionConfig;
+var TOTAL_USERS = jsonConfig.start_users;
 
-const CONFIG = {
-  url: "ws://localhost:3000",
-  options: {
-    protocolVersion: 8,
-    origin: 'http://localhost:3000',
-    headers: {
-    }
-  }
-};
+// TODO
+// var CURRENT_USERS_RAMP = jsonConfig.start_users;
 
-
-// confg lease ok
-// const CONFIG = {
-//   url: "ws://172.17.0.19:4567/apicontratreducer/ws",
-//   options: {
-//     origin: "http://172.17.0.19:4567",
-//     headers: {
-//       Cookie: 'RESTIT_TUTORIAL=1; PLAY_USER=CA-INATIV; PLAY_LANG=fr; PLAY_SESSION="b9af6a28b6d8a3f695ed2bcaceb8d18c9e395c90-username=ca-inativ&level=SUPERADMIN&___AT=f5b0677479b0eb30fc32dd3161874c9cacb35280"'
-//     }
-//   }
-// };
-
-const TOTAL_USERS = 10;
-// send an action that will broadcast to everyone, get the time and then get the arrival time for each response
-// {
-//   "waitingFor": "on-message",
-//   "expect": { id: "ui1", msg: "Hello" },
-//   "dispatcher": fn
-// }
+// TODO: ramp, unramp, wait interval ...
 
 var clients = {};
 for ( let i = 0, client; i < TOTAL_USERS; ++i )
