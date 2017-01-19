@@ -60,7 +60,7 @@ Client.prototype.start = function( url, options )
 Client.prototype.onConnectionSuccess = function(){}
 Client.prototype.onConnectionFail = function( err )
 {
-  console.log( "Client connection error: ", err );
+  throw "Client connection error: " + err;
 };
 
 Client.prototype.onmessage = function( packet )

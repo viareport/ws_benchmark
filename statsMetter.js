@@ -77,11 +77,24 @@ class StatsMetter extends Events {
       console.log( "Min time: " + pkStat.min );
       console.log( "Max time: " + pkStat.max );
       console.log( "Avg time: " + average );
+      console.log( "Median: " + median( pkStat.all ) );
       
       if ( pkStat.IOBlocking )
         this.emit( "runScenarios" );
     }
   }
 };
+
+function median( values )
+{
+  values.sort( function( a, b ) { return a - b; } );
+
+  var half = Math.floor( values.length / 2 );
+
+  if ( values.length % 2 )
+    return values[ half ];
+  else
+    return ( values[ half - 1 ] + values[ half ] ) / 2.0;
+}
 
 module.exports = new StatsMetter();
