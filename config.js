@@ -31,8 +31,10 @@ module.exports = {
     },
     {
       "target": "uid-0",
-      "action": "send",
-      "data": "post-contract-modification",
+      "action": "REST",
+      "method": "POST",
+      "url": "http://url-server-rest/post-contract-modification"
+      "data": { data: "post-contract-modification" },
       "returnPacket": "get-contract-modification",
       "IOBlocking": true // will wait until all clients received the edit packet, before continuing the scenario
     }

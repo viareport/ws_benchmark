@@ -16,19 +16,26 @@ Client.prototype.play = function( scenario )
 {
   var sc = scenario; //this._queue[ this._queuePos++ ];
 
-  if ( sc.action === "waitingFor" )
+  switch( sc.action.toLowerCase() )
   {
-    statsMetter.waiting( sc.message );
-    this.waitingFor.push( sc.message );
-  }
-  else if ( sc.action === "send" )
-  {
-    if ( sc.returnPacket )
-      statsMetter.start( sc.returnPacket, sc.IOBlocking );
-    else if ( sc.expect )
-      statsMetter.startExpect( sc.expect, sc.IOBlocking, true );
+    case "waitingFor":
+      statsMetter.waiting( sc.message );
+      this.waitingFor.push( sc.message );
+      break;
+    
+    case "send":
+      if ( sc.returnPacket )
+        statsMetter.start( sc.returnPacket, sc.IOBlocking );
+      else if ( sc.expect )
+        statsMetter.startExpect( sc.expect, sc.IOBlocking, true );
 
-    this.ws.send( sc.data );
+      this.ws.send( sc.data );
+      break;
+    
+    // TODO
+    case "rest":
+      // sc.method
+      break;
   }
   // TODO add action to start statMetter manually 
 };
