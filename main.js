@@ -17,7 +17,7 @@ var TOTAL_USERS = jsonConfig.start_users;
 var clients = {};
 for ( let i = 0, client; i < TOTAL_USERS; ++i )
 {
-  client = new Client( i );
+  client = new Client( i, jsonConfig.wsClientConfig );
   clients[ client.id ] = client;
 }
 

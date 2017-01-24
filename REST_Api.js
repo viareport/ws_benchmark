@@ -6,6 +6,7 @@ const fetch = ( url, method, options ) => {
   var st = {
     method: method,
     uri: url,
+    rejectUnauthorized: false,
     json: true,
     body: options.body,
     form: options.form,

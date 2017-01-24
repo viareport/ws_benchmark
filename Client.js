@@ -2,7 +2,7 @@ const WebSocket = require( "ws" ); // npm ws
 const statsMetter = require( "./statsMetter" );
 const REST_Api = require( "./REST_Api" );
 
-function Client( index )
+function Client( index, wsOpts )
 {
   this.id = "uid-" + index;
   this.ws  = null;
@@ -10,6 +10,9 @@ function Client( index )
   this._queuePos = 0;
 
   this.waitingFor = [];
+
+  this.wsUseJSON = wsOpts ? wsOpts.useJson : false;
+  this.wsPacketAttributeName = wsOpts ? wsOpts.packetAttributeName : undefined;
 }
 
 var _knownMethods = [ "post", "get", "put", "delete" ];
@@ -92,17 +95,23 @@ Client.prototype.onConnectionFail = function( err )
 
 Client.prototype.onmessage = function( packet )
 {
+  var messageName = packet;
+  if ( this.wsUseJSON )
+  {
+    var data = JSON.parse( packet );
+    messageName = data[ this.wsPacketAttributeName ];
+  }
   // TODO detect format and parse it, actually it's only string support
   // console.log( "onmessage: ", packet );
 
   // le message reçu est celui que l'on attendait
-  if ( this.waitingFor.indexOf( packet ) !== -1 )
+  if ( this.waitingFor.indexOf( messageName ) !== -1 )
   {
     // donne le TS d'arrivé pour ensuite pouvoir calculer avec le TS de départ
     // (on a 1 client à l'origine de l'event, ce sera comparé a son timestamp d'envoi)
     // trigger qu'il a reçu sa data avec les stats
-    statsMetter.received( this.id, packet, Date.now() );
-    this.waitingFor.splice( this.waitingFor.indexOf( packet ), 1 );
+    statsMetter.received( this.id, messageName, Date.now() );
+    this.waitingFor.splice( this.waitingFor.indexOf( messageName ), 1 );
   }
 };
 
