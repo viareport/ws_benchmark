@@ -1,9 +1,8 @@
 module.exports = {
   // users created on start
-  start_users: 10,
+  start_users: 3,
   
-  // TODO can't go higher than this
-  max_users: 2000,
+  max_users: 3,
 
   // TODO ramps
   ramp_to: 1000,
@@ -33,7 +32,7 @@ module.exports = {
       "target": "uid-0",
       "action": "REST",
       "method": "POST",
-      "url": "http://url-server-rest/post-contract-modification"
+      "url": "http://localhost:3001/post-contract-modification",
       "data": { data: "post-contract-modification" },
       "returnPacket": "get-contract-modification",
       "IOBlocking": true // will wait until all clients received the edit packet, before continuing the scenario
@@ -45,10 +44,10 @@ module.exports = {
 
   // connection config, header can include whatever you like
   connectionConfig: {
-    url: "ws://localhost:3000",
+    url: "ws://localhost:3002",
     options: {
       protocolVersion: 8,
-      origin: 'http://localhost:3000',
+      origin: 'http://localhost:3002',
       headers: {
       }
     }
